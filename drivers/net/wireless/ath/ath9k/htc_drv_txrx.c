@@ -543,7 +543,7 @@ void ath9k_htc_tx_drain(struct ath9k_htc_priv *priv)
 	 * Ensure that all pending TX frames are flushed,
 	 * and that the TX completion/failed tasklets is killed.
 	 */
-	htc_stop(priv->htc);
+	htc_stop_hst(priv->htc);
 	tasklet_kill(&priv->wmi->wmi_event_tasklet);
 	tasklet_kill(&priv->tx_failed_tasklet);
 
@@ -998,9 +998,9 @@ static bool ath9k_rx_prepare(struct ath9k_htc_priv *priv,
 	 * which are not PHY_ERROR (short radar pulses have a length of 3)
 	 */
 	if (unlikely(!rs_datalen || (rs_datalen < 10 && !is_phyerr))) {
-		ath_warn(common,
-			 "Short RX data len, dropping (dlen: %d)\n",
-			 rs_datalen);
+		ath_dbg(common, ANY,
+			"Short RX data len, dropping (dlen: %d)\n",
+			rs_datalen);
 		goto rx_next;
 	}
 
